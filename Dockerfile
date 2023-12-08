@@ -1,6 +1,6 @@
 from ubuntu:20.04 as builder
 ARG LIBRTLSDR_TAG=master
-ARG IONOSPHERE_VERSION=v1.0.3
+ARG MUTLIMON_NG_VERSION=1.3.0
 
 ENV TZ=America/Chicago
 ENV TZ=UTC
@@ -12,7 +12,15 @@ RUN cd /librtlsdr && mkdir build && cd build && cmake ../ && make && cd src && m
 RUN apt-get install -y binutils patchelf build-essential scons upx
 RUN apt-get install -y python3 python3-pip && pip install --no-warn-script-location --upgrade virtualenv pip poetry pyinstaller staticx
 
-RUN apt-get install -y socat
+RUN apt-get install -y socat curl
+RUN curl -L -o multimon.tar.gz https://github.com/EliasOenal/multimon-ng/archive/refs/tags/$MUTLIMON_NG_VERSION.tar.gz && \
+    tar xvzf multimon.tar.gz && \
+    cd /multimon-ng-$MUTLIMON_NG_VERSION && \
+    mkdir build && \ 
+    cd build && \
+    cmake .. && \
+    make && \
+    cp ./multimon-ng /usr/bin/multimon-ng
 
 COPY scripts /scripts
 RUN /bin/bash /scripts/static.sh
