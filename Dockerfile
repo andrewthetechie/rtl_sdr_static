@@ -12,7 +12,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool librtlsdr-dev rtl-sdr pkg-config 
 
 # direwolf requirements
-RUN apt-get install -y alsa-lib-devel libudev-devel libudev-devel
+RUN apt-get install -y libasound2-dev libudev-dev libavahi-client-dev
 
 # install librtlsdr from git
 RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/librtlsdr.git
