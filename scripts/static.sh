@@ -6,7 +6,7 @@ do
     staticx --strip $file /static/$file
 done
 
-SUPPORTING_FILES="tee socat filan procan multimon-ng rtl_433"
+SUPPORTING_FILES="tee nc socat filan procan multimon-ng rtl_433 direwolf"
 for file in $SUPPORTING_FILES
 do
     staticx --strip /usr/bin/$file /static/$file
