@@ -9,7 +9,7 @@ ENV TZ=America/Chicago
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # rtlsdr and rtl_433 requirements
-RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool librtlsdr-dev rtl-sdr pkg-config 
+RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool librtlsdr-dev rtl-sdr pkg-config libssl-dev
 
 # direwolf requirements
 RUN apt-get install -y libasound2-dev libudev-dev libavahi-client-dev
