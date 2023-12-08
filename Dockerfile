@@ -11,9 +11,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # rtlsdr and rtl_433 requirements
 RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool librtlsdr-dev rtl-sdr pkg-config libssl-dev
 
-# direwolf requirements
-RUN apt-get install -y libasound2-dev libudev-dev libavahi-client-dev
-
 # install librtlsdr from git
 RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/librtlsdr.git
 RUN cd /librtlsdr && mkdir build && cd build && cmake ../ && make && cd src && mkdir /static
@@ -44,16 +41,6 @@ RUN curl -L -o rtl_433.tar.gz https://github.com/merbanan/rtl_433/archive/refs/t
     cmake .. && \
     make && \
     cp src/rtl_433 /usr/bin/rtl_433
-
-# direwolf
-RUN curl -L -o direwolf.tar.gz https://github.com/wb2osz/direwolf/archive/refs/tags/${DIREWOLF_VERSION}.tar.gz && \
-    tar xvzf direwolf.tar.gz && \
-    cd direwolf-${DIREWOLF_VERSION} && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make -j4 && \
-    cp src/direwolf /usr/bin/direwolf
 
 # scripts to static link everything
 COPY scripts /scripts
