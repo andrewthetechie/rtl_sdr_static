@@ -1,5 +1,6 @@
 from ubuntu:20.04 as builder
 ARG LIBRTLSDR_TAG=master
+ARG IONOSPHERE_VERSION=v1.0.3
 
 ENV TZ=America/Chicago
 ENV TZ=UTC
@@ -10,9 +11,12 @@ RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/lib
 RUN cd /librtlsdr && mkdir build && cd build && cmake ../ && make && cd src && mkdir /static
 RUN apt-get install -y binutils patchelf build-essential scons upx
 RUN apt-get install -y python3 python3-pip && pip install --no-warn-script-location --upgrade virtualenv pip poetry pyinstaller staticx
-COPY scripts/static.sh /static.sh
-RUN /bin/bash /static.sh
 
-FROM gcr.io/distroless/static-debian12
+RUN apt-get install -y socat
 
-COPY --from=builder /static/* /bin
+COPY scripts /scripts
+RUN /bin/bash /scripts/static.sh
+
+# FROM gcr.io/distroless/static-debian12
+
+# COPY --from=builder /static/* /bin
