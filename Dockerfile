@@ -17,6 +17,6 @@ RUN apt-get install -y socat
 COPY scripts /scripts
 RUN /bin/bash /scripts/static.sh
 
-# FROM gcr.io/distroless/static-debian12
+FROM gcr.io/distroless/static-debian12
 
-# COPY --from=builder /static/* /bin
+COPY --from=builder /static/* /bin

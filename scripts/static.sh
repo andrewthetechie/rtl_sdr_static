@@ -6,8 +6,8 @@ do
     staticx --strip $file /static/$file
 done
 
-SOCAT_FILES="socat filan procan"
-for file in $SOCAT_FILES
+SUPPORTING_FILES="tee socat filan procan"
+for file in $SUPPORTING_FILES
 do
     staticx --strip /usr/bin/$file /static/$file
 done
