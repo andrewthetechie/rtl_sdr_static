@@ -1,5 +1,7 @@
 from ubuntu:20.04 as builder
 
+# Builder is our base image with librtlsdr
+
 ARG LIBRTLSDR_TAG=master
 ARG MUTLIMON_NG_VERSION=1.3.0
 ARG RTL_433_VERSION=23.11
@@ -44,8 +46,40 @@ RUN curl -L -o rtl_433.tar.gz https://github.com/merbanan/rtl_433/archive/refs/t
 
 # scripts to static link everything
 COPY scripts /scripts
+
+
+# overwrite librtlsdr with the rtlsdr blog dribers
+FROM builder as rtlsdrblogbuilder
+
+RUN apt-get install libusb-1.0-0-dev git cmake pkg-config && \
+    git clone https://github.com/rtlsdrblog/rtl-sdr-blog && \
+    cd rtl-sdr-blog/ && \
+    mkdir build && \
+    cd build && \
+    cmake ../ -DINSTALL_UDEV_RULES=ON && \
+    make && \
+    make install && \
+    cp ../rtl-sdr.rules /etc/udev/rules.d/ && \
+    ldconfig
+
+# rtl_433
+RUN cd rtl_433-${RTL_433_VERSION} && \
+    cd build && \
+    cmake .. && \
+    make && \
+    cp src/rtl_433 /usr/bin/rtl_433
+
 RUN /bin/bash /scripts/static.sh
 
-FROM gcr.io/distroless/static-debian12
+FROM builder as builder-static
+RUN /bin/bash /scripts/static.sh
+
+FROM rtlsdrblogbuilder as rtlsdrblogbuilder-static
+
+FROM gcr.io/distroless/static-debian12 as librtlsdr
 
 COPY --from=builder /static/* /bin
+
+FROM gcr.io/distroless/static-debian12 as rtlsdrblog
+
+COPY --from=rtlsdrblogbuilder-static /static/* /bin
