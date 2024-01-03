@@ -76,9 +76,11 @@ RUN /bin/bash /scripts/static.sh
 
 FROM rtlsdrblogbuilder as rtlsdrblogbuilder-static
 
+RUN /bin/bash /scripts/static.sh
+
 FROM gcr.io/distroless/static-debian12 as librtlsdr
 
-COPY --from=builder /static/* /bin
+COPY --from=builder-static /static/* /bin
 
 FROM gcr.io/distroless/static-debian12 as rtlsdrblog
 
