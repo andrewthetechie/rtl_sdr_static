@@ -2,7 +2,8 @@ from ubuntu:20.04 as builder
 
 # Builder is our base image with librtlsdr
 
-ARG LIBRTLSDR_TAG=master
+ARG LIBRTLSDR_TAG=v0.8.0
+ARG RTLSDRBLOG_TAG=V1.3.4
 ARG MUTLIMON_NG_VERSION=1.3.0
 ARG RTL_433_VERSION=23.11
 ARG DIREWOLF_VERSION=1.7
@@ -11,7 +12,7 @@ ENV TZ=America/Chicago
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # rtlsdr and rtl_433 requirements
-RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool librtlsdr-dev rtl-sdr pkg-config libssl-dev
+RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev librtlsdr-dev rtl-sdr libtool pkg-config libssl-dev
 
 # install librtlsdr from git
 RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/librtlsdr.git
@@ -50,9 +51,10 @@ COPY scripts /scripts
 
 # overwrite librtlsdr with the rtlsdr blog dribers
 FROM builder as rtlsdrblogbuilder
+ARG RTLSDRBLOG_TAG
 
 RUN apt-get install libusb-1.0-0-dev git cmake pkg-config && \
-    git clone https://github.com/rtlsdrblog/rtl-sdr-blog && \
+    git clone --depth 1 --branch $RTLSDRBLOG_TAG https://github.com/rtlsdrblog/rtl-sdr-blog && \
     cd rtl-sdr-blog/ && \
     mkdir build && \
     cd build && \
