@@ -43,8 +43,14 @@ ARG RTL_433_VERSION
 RUN apt-get install -y librtlsdr-dev
 
 # install librtlsdr from git
-RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/librtlsdr.git
-RUN cd /librtlsdr && mkdir build && cd build && cmake ../ && make && cd src && mkdir /static
+RUN git clone --depth 1 --branch $LIBRTLSDR_TAG https://github.com/librtlsdr/librtlsdr.git && \
+    cd /librtlsdr && \
+    mkdir build && \
+    cd build && \
+    cmake ../ && \
+    make && \
+    make install && \
+    ldconfig
 
 # rtl_433
 RUN git clone --depth 1 --branch $RTL_433_VERSION https://github.com/merbanan/rtl_433.git && \
