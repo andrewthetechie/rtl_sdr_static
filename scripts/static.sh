@@ -5,7 +5,7 @@ do
     staticx --strip /usr/local/bin/$file /static/$file
 done
 
-SUPPORTING_FILES="tee nc socat filan procan multimon-ng rtl_433 sh cat"
+SUPPORTING_FILES="tee nc socat filan procan multimon-ng rtl_433 sh cat pee"
 for file in $SUPPORTING_FILES
 do
     staticx --strip /usr/bin/$file /static/$file

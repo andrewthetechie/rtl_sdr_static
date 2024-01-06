@@ -11,7 +11,7 @@ ENV TZ=America/Chicago
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # rtlsdr and rtl_433 requirements
-RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool pkg-config libssl-dev
+RUN apt-get update && apt-get install -y build-essential cmake git libusb-dev libusb-1.0-0-dev libtool pkg-config libssl-dev moreutils
 
 # staticx requirements
 RUN apt-get install -y binutils patchelf build-essential scons upx
